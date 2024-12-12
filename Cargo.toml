@@ -1,0 +1,9 @@
+[package]
+name = "wick"
+version = "0.1.0"
+edition = "2021"
+authors = ["Max Gilmour"]
+repository = "https://github.com/maxgmr/wick"
+license-file = "LICENSE"
+
+[dependencies]
