@@ -4,6 +4,8 @@
   "description": "Read Wikipedia articles in the terminal.",
   "main": "index.js",
   "scripts": {
+    "build": "npx tsc",
+    "start": "npx tsc && node dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,5 +19,9 @@
   "bugs": {
     "url": "https://github.com/maxgmr/wick/issues"
   },
-  "homepage": "https://github.com/maxgmr/wick#readme"
+  "homepage": "https://github.com/maxgmr/wick#readme",
+  "dependencies": {
+    "commander": "^13.0.0",
+    "typescript": "^5.7.2"
+  }
 }

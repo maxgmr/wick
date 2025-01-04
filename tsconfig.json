@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "rootDir": "src",
+        "outDir": "dist",
+        "strict": true,
+        "exactOptionalPropertyTypes": true,
+        "forceConsistentCasingInFileNames": true,
+        "target": "es6",
+        "module": "nodenext",
+        "moduleResolution": "nodenext",
+        "sourceMap": true,
+        "skipLibCheck": false
+    }
+}
