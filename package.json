@@ -3,10 +3,14 @@
   "version": "1.0.0",
   "description": "Read Wikipedia articles in the terminal.",
   "main": "wick.js",
+  "bin": {
+    "wick": "./dist/wick.js"
+  },
   "scripts": {
     "build": "npx tsc",
-    "start": "npx tsc && node dist/wick.js",
-    "pkg": "npx tsc && pkg dist/wick.js -t latest-linux-x64 --out-path bin",
+    "start": "npm run build && node dist/wick.js",
+    "pkg": "npm run build && pkg dist/wick.js -t latest-linux-x64 --out-path bin",
+    "build-install": "npm run build && npm install -g .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
