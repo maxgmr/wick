@@ -2,10 +2,11 @@
   "name": "wick",
   "version": "1.0.0",
   "description": "Read Wikipedia articles in the terminal.",
-  "main": "index.js",
+  "main": "wick.js",
   "scripts": {
     "build": "npx tsc",
-    "start": "npx tsc && node dist/index.js",
+    "start": "npx tsc && node dist/wick.js",
+    "pkg": "npx tsc && pkg dist/wick.js -t latest-linux-x64 --out-path bin",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -21,7 +22,10 @@
   },
   "homepage": "https://github.com/maxgmr/wick#readme",
   "dependencies": {
-    "commander": "^13.0.0",
+    "commander": "^13.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
     "typescript": "^5.7.2"
   }
 }
