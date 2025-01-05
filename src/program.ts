@@ -1,12 +1,10 @@
 import readline from "node:readline/promises";
-import {
-  Command,
-  InvalidOptionArgumentError,
-  OptionValues,
-} from "@commander-js/extra-typings";
+import { Command, OptionValues } from "@commander-js/extra-typings";
+import cliSelect from "cli-select";
+import { bold, green } from "yoctocolors";
 
-import { VERSION } from "./consts";
-import { WikiSearchResult } from "./requests";
+import { VERSION } from "./consts.js";
+import { WikiSearchResult } from "./requests.js";
 
 const DESC = "Read Wikipedia articles in the terminal.";
 
@@ -71,9 +69,26 @@ export const getProgramQuery = (
 };
 
 /**
- * Select an article from the given list based on the options.
+ * Select an article interactively from the list of articles, returning immediately
+ * if the list is length 1.
  */
-/* export const selectArticle = ( */
-/*   results: WikiSearchResult[], */
-/*   options: WickOptions, */
-/* ): WikiSearchResult => {}; */
+export const selectArticle = async (
+  results: WikiSearchResult[],
+): Promise<WikiSearchResult> => {
+  // Default: select first article
+  if (results.length == 1) {
+    return results[0];
+  }
+
+  // If multiple search results, select from list interactively
+  const resolvedResult = await cliSelect({
+    values: results,
+    valueRenderer: (value, selected) => {
+      if (selected) {
+        return bold(green(value.title));
+      }
+      return value.title;
+    },
+  });
+  return resolvedResult.value;
+};

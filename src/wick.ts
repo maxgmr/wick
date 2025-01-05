@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import { getProgramQuery, programInit } from "./program";
-import { wikiSearch } from "./requests";
+import { getProgramQuery, programInit, selectArticle } from "./program.js";
+import { wikiSearch } from "./requests.js";
 
 (async (): Promise<number> => {
   const program = programInit(process.argv);
@@ -17,6 +17,9 @@ import { wikiSearch } from "./requests";
     console.error(`No results found for query "${query}".`);
     return 1;
   }
+
+  const chosenResult = await selectArticle(searchResults);
+  console.log(JSON.stringify(chosenResult, null, 2));
 
   return 0;
 })();
