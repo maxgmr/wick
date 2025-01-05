@@ -26,7 +26,10 @@
   },
   "homepage": "https://github.com/maxgmr/wick#readme",
   "dependencies": {
-    "commander": "^13.0.0"
+    "@commander-js/extra-typings": "^13.0.0",
+    "cli-select": "^1.1.2",
+    "commander": "^13.0.0",
+    "yoctocolors": "^2.1.1"
   },
   "devDependencies": {
     "@types/node": "^22.10.5",
