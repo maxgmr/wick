@@ -9,7 +9,6 @@ import { wikiParse, wikiSearch } from "./requests.js";
   const options = program.opts();
   const query = await getProgramQuery(program);
 
-  // TODO go straight to Parse API if strict
   const pageTitle = await (async () => {
     if (options.strict) {
       // Go straight to parse API
@@ -34,6 +33,7 @@ import { wikiParse, wikiSearch } from "./requests.js";
   }
 
   const pageText = formatHtml(pageHtml);
+  // Output page text
   console.log(pageText);
 
   return 0;

@@ -1,3 +1,5 @@
+import { EMAIL } from "./consts.js";
+
 const WIKI_URL_BASE = "https://en.wikipedia.org/w/api.php?";
 
 const SEARCH_URL_START =
@@ -29,6 +31,17 @@ const wikiParseUrl = (page: string): string => {
 };
 
 /**
+ * Request a given URL using my email as the API user agent. Intended for the Wikipedia API.
+ */
+const wikiFetch = (url: string): Promise<Response> => {
+  return fetch(url, {
+    headers: {
+      "Api-User-Agent": EMAIL,
+    },
+  });
+};
+
+/**
  * Use the Wikipedia search API to search for a given query.
  */
 export const wikiSearch = async (
@@ -36,7 +49,7 @@ export const wikiSearch = async (
   resultCount: number,
 ): Promise<WikiSearchResult[]> => {
   const url = wikiSearchUrl(query, resultCount);
-  const res = await fetch(url);
+  const res = await wikiFetch(url);
   const json = await res.json();
 
   // Convert to WikiSearchResults
@@ -54,7 +67,7 @@ export const wikiSearch = async (
  */
 export const wikiParse = async (query: string): Promise<string> => {
   const url = wikiParseUrl(query);
-  const res = await fetch(url);
+  const res = await wikiFetch(url);
   const json = await res.json();
   if (json?.error) {
     throw new Error(json.error.info);
