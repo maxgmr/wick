@@ -45,7 +45,7 @@ const searchApiUrl = (query: string, limit: number): string =>
  * Construct a Wiki Page API URL.
  */
 const pageApiUrl = (page: string, is_full: boolean): string =>
-  PAGE_URL_BASE + (is_full ? "" : PAGE_URL_EXINTRO) + page;
+  PAGE_URL_BASE + (is_full ? "" : PAGE_URL_EXINTRO) + PAGE_URL_TITLE + page;
 
 /**
  * Make a Wikipedia Search API request.

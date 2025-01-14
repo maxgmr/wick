@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-import { formatHtml } from "./formatting.js";
 import { getProgramQuery, programInit, selectArticle } from "./program.js";
 import { wikiPage, wikiSearch } from "./requests.js";
 
@@ -24,7 +23,7 @@ import { wikiPage, wikiSearch } from "./requests.js";
       return "";
     }
     const chosenResult = await selectArticle(searchResults);
-    return chosenResult.title;
+    return chosenResult;
   })();
   if (!pageTitle) {
     console.error(`No results found for query "${query}".`);

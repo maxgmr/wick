@@ -1,6 +1,6 @@
 import readline from "node:readline/promises";
 import { Command, OptionValues } from "@commander-js/extra-typings";
-import cliSelect from "cli-select";
+import select from "@inquirer/select";
 import { bold, green } from "yoctocolors";
 
 import { VERSION } from "./consts.js";
@@ -71,26 +71,21 @@ export const getProgramQuery = (
 };
 
 /**
- * Select an article interactively from the list of articles, returning immediately
+ * Select an article title interactively from the list of articles, returning immediately
  * if the list is length 1.
  */
 export const selectArticle = async (
   results: WikiSearchResult[],
-): Promise<WikiSearchResult> => {
+): Promise<string> => {
   // Default: select first article
   if (results.length == 1) {
-    return results[0];
+    return results[0].title;
   }
 
   // If multiple search results, select from list interactively
-  const resolvedResult = await cliSelect({
-    values: results,
-    valueRenderer: (value, selected) => {
-      if (selected) {
-        return bold(green(value.title));
-      }
-      return value.title;
-    },
+  const chosenTitle: string = await select({
+    message: "",
+    choices: results.map(({ title }) => title),
   });
-  return resolvedResult.value;
+  return chosenTitle;
 };
