@@ -2,7 +2,7 @@
 
 import { formatHtml } from "./formatting.js";
 import { getProgramQuery, programInit, selectArticle } from "./program.js";
-import { wikiSearch } from "./requests.js";
+import { wikiPage, wikiSearch } from "./requests.js";
 
 (async (): Promise<number> => {
   const program = programInit(process.argv);
@@ -21,11 +21,23 @@ import { wikiSearch } from "./requests.js";
       options.interactive ? options.results : 1,
     );
     if (searchResults.length == 0) {
-      throw new Error(`No results found for query "${query}".`);
+      return "";
     }
     const chosenResult = await selectArticle(searchResults);
     return chosenResult.title;
   })();
+  if (!pageTitle) {
+    console.error(`No results found for query "${query}".`);
+    return 1;
+  }
+
+  const page = await wikiPage(pageTitle, options.full);
+  if (!page) {
+    console.error(`No page found with title "${pageTitle}".`);
+    return 1;
+  }
+
+  console.log(page.extract);
 
   return 0;
 })();

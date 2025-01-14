@@ -12,6 +12,7 @@ interface WickOptions extends OptionValues {
   interactive: boolean;
   results: number;
   strict: boolean;
+  full: boolean;
 }
 
 /**
@@ -38,6 +39,7 @@ export const programInit = (
       5,
     )
     .option("-s --strict", "only open exact article title matches", false)
+    .option("-f --full", "show the full contents of the article", false)
     .parse(argv);
   return program;
 };
