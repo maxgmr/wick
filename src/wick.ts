@@ -2,7 +2,7 @@
 
 import { formatHtml } from "./formatting.js";
 import { getProgramQuery, programInit, selectArticle } from "./program.js";
-import { wikiParse, wikiSearch } from "./requests.js";
+import { wikiSearch } from "./requests.js";
 
 (async (): Promise<number> => {
   const program = programInit(process.argv);
@@ -26,15 +26,6 @@ import { wikiParse, wikiSearch } from "./requests.js";
     const chosenResult = await selectArticle(searchResults);
     return chosenResult.title;
   })();
-
-  const pageHtml = await wikiParse(pageTitle);
-  if (!pageHtml) {
-    throw new Error(`No page HTML for page "${pageTitle}".`);
-  }
-
-  const pageText = formatHtml(pageHtml);
-  // Output page text
-  console.log(pageText);
 
   return 0;
 })();

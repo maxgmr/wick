@@ -1,76 +1,41 @@
 import { EMAIL } from "./consts.js";
 
-const WIKI_URL_BASE = "https://en.wikipedia.org/w/api.php?";
+const HEADERS = {
+  "User-Agent": EMAIL,
+};
 
-const SEARCH_URL_START =
-  "action=query&origin=*&format=json&generator=search&gsrnamespace=0";
-const SEARCH_URL_LIMIT = "&gsrlimit=";
-const SEARCH_URL_QUERY = "&gsrsearch=";
+const SEARCH_URL_BASE = "https://en.wikipedia.org/w/rest.php/v1/search/page?";
 
-const PARSE_URL_START = "action=parse&origin=*&prop=text&format=json";
-const PARSE_URL_PAGE = "&page=";
-
-export type WikiSearchResult = {
-  pageid: number;
+export interface WikiSearchResult {
+  id: number;
+  key: string;
   title: string;
-  index: number;
-};
+  excerpt: string;
+  matched_title: string;
+  description: string;
+}
 
 /**
- * Assemble a Wikipedia query URL with the given query and desired result count.
+ * Get the Search API params as a string.
  */
-const wikiSearchUrl = (query: string, resultCount: number): string => {
-  return `${WIKI_URL_BASE}${SEARCH_URL_START}${SEARCH_URL_LIMIT}${resultCount}${SEARCH_URL_QUERY}${query}`;
+const wikiSearchParams = (query: string, limit: number): string => {
+  const searchParams: Record<string, any> = new URLSearchParams();
+  searchParams.append("q", query);
+  searchParams.append("limit", limit);
+  return searchParams.toString();
 };
 
 /**
- * Assemble a Wikipedia Parse API URL with the given page name.
- */
-const wikiParseUrl = (page: string): string => {
-  return `${WIKI_URL_BASE}${PARSE_URL_START}${PARSE_URL_PAGE}${page}`;
-};
-
-/**
- * Request a given URL using my email as the API user agent. Intended for the Wikipedia API.
- */
-const wikiFetch = (url: string): Promise<Response> => {
-  return fetch(url, {
-    headers: {
-      "Api-User-Agent": EMAIL,
-    },
-  });
-};
-
-/**
- * Use the Wikipedia search API to search for a given query.
+ * Make a Wikipedia Search API request.
  */
 export const wikiSearch = async (
   query: string,
-  resultCount: number,
+  limit: number,
 ): Promise<WikiSearchResult[]> => {
-  const url = wikiSearchUrl(query, resultCount);
-  const res = await wikiFetch(url);
-  const json = await res.json();
-
-  // Convert to WikiSearchResults
-  const result: WikiSearchResult[] = [];
-  for (const key in json?.query?.pages ?? {}) {
-    const val = json.query.pages[key];
-    result.push({ pageid: val.pageid, title: val.title, index: val.index });
-  }
-  result.sort((a, b) => a.index - b.index);
-  return result;
-};
-
-/**
- * Use the Wikipedia Parse API to get the HTML text of a given page.
- */
-export const wikiParse = async (query: string): Promise<string> => {
-  const url = wikiParseUrl(query);
-  const res = await wikiFetch(url);
-  const json = await res.json();
-  if (json?.error) {
-    throw new Error(json.error.info);
-  }
-  return json?.parse?.text?.["*"] ?? "";
+  const response = await fetch(
+    SEARCH_URL_BASE + wikiSearchParams(query, limit),
+    { headers: HEADERS },
+  );
+  const data = await response.json();
+  return data.pages as WikiSearchResult[];
 };
